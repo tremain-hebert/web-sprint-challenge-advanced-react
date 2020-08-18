@@ -3,7 +3,31 @@ import axios from "axios";
 
 export default class PlantList extends Component {
   // add state with a property called "plants" - initialize as an empty array
+  constructor() {
+    console.log("Constructor Running")
+    super();
+    this.state = {
+      plants: []
+    };
+  }
 
+  componentDidMount() {
+    console.log("CDM Running");
+    axios
+      .get('http://localhost:3333/plants')
+      .then(res => {
+        console.log(res.data);
+        this.setState({plants: res.data.plantsData})
+      })
+      .catch(err => console.log("there was an error", err));
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("CDU running");
+    if (this.state.plants !== prevState.plants) {
+      console.log("Plants on state has changed")
+    }
+  }
   // when the component mounts:
   //   - fetch data from the server endpoint - http://localhost:3333/plants
   //   - set the returned plants array to this.state.plants
